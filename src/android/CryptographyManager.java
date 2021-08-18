@@ -21,11 +21,11 @@ interface CryptographyManager {
     /**
      * The Cipher created with [getInitializedCipherForEncryption] is used here
      */
-    EncryptedData encryptData(String plaintext, Cipher cipher) throws CryptoException;
+    EncryptedData encryptData(String plaintext, Cipher cipher, String keyName) throws CryptoException;
 
     /**
      * The Cipher created with [getInitializedCipherForDecryption] is used here
      */
-    String decryptData(byte[] ciphertext, Cipher cipher) throws CryptoException;
+    String decryptData(byte[] ciphertext, Cipher cipher, String keyName) throws CryptoException;
 
 }

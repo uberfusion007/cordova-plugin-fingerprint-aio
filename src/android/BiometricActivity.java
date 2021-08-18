@@ -212,13 +212,13 @@ public class BiometricActivity extends AppCompatActivity {
 
     private void encrypt(BiometricPrompt.CryptoObject cryptoObject) throws CryptoException {
         String text = mPromptInfo.getSecret();
-        EncryptedData encryptedData = mCryptographyManager.encryptData(text, cryptoObject.getCipher());
+        EncryptedData encryptedData = mCryptographyManager.encryptData(text, cryptoObject.getCipher(), SECRET_KEY);
         encryptedData.save(this);
     }
 
     private Intent getDecryptedIntent(BiometricPrompt.CryptoObject cryptoObject) throws CryptoException {
         byte[] ciphertext = EncryptedData.loadCiphertext(this);
-        String secret = mCryptographyManager.decryptData(ciphertext, cryptoObject.getCipher());
+        String secret = mCryptographyManager.decryptData(ciphertext, cryptoObject.getCipher(), SECRET_KEY);
         if (secret != null) {
             Intent intent = new Intent();
             intent.putExtra(PromptInfo.SECRET_EXTRA, secret);

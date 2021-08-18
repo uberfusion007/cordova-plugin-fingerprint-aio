@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
@@ -149,20 +150,32 @@ class CryptographyManagerImpl implements CryptographyManager {
     }
 
     @Override
-    public EncryptedData encryptData(String plaintext, Cipher cipher) throws CryptoException {
+    public EncryptedData encryptData(String plaintext, Cipher cipher, String keyName) throws CryptoException {
         try {
             byte[] ciphertext = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
             return new EncryptedData(ciphertext, cipher.getIV());
+        } catch (IllegalBlockSizeException e) {
+            if (e.getCause() != null && e.getCause().getMessage().contains("Key user not authenticated")) {
+                removeKey(keyName);
+                throw new KeyInvalidatedException();
+            }
+            throw new CryptoException(e.getMessage(), e);
         } catch (Exception e) {
             throw new CryptoException(e.getMessage(), e);
         }
     }
 
     @Override
-    public String decryptData(byte[] ciphertext, Cipher cipher) throws CryptoException {
+    public String decryptData(byte[] ciphertext, Cipher cipher, String keyName) throws CryptoException {
         try {
             byte[] plaintext = cipher.doFinal(ciphertext);
             return new String(plaintext, StandardCharsets.UTF_8);
+        } catch (IllegalBlockSizeException e) {
+            if (e.getCause() != null && e.getCause().getMessage().contains("Key user not authenticated")) {
+                removeKey(keyName);
+                throw new KeyInvalidatedException();
+            }
+            throw new CryptoException(e.getMessage(), e);
         } catch (Exception e) {
             throw new CryptoException(e.getMessage(), e);
         }
