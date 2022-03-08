@@ -1,6 +1,6 @@
 {
-  "name": "cordova-plugin-fingerprint-aio",
-  "version": "5.0.1",
+  "name": "@uberfusion007/cordova-plugin-fingerprint-aio",
+  "version": "5.0.2",
   "description": "Cordova plugin to use fingerprint authentication on Android and iOS",
   "cordova": {
     "id": "cordova-plugin-fingerprint-aio",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/niklasmerz/cordova-plugin-fingerprint-aio"
+    "url": "git+https://github.com/uberfusion007/cordova-plugin-fingerprint-aio"
   },
   "keywords": [
     "cordova",
